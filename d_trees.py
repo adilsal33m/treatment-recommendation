@@ -112,7 +112,7 @@ def train_model(filename):
     y = df['treatment']
     y = ylb.fit_transform(y)
 
-    br_clf = MultiOutputClassifier(DecisionTreeClassifier(max_depth=7))
+    br_clf = MultiOutputClassifier(DecisionTreeClassifier())
     br_clf.fit(X, y)
 
     return br_clf,xlb,ylb
