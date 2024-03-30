@@ -6,6 +6,7 @@ from sklearn.tree import DecisionTreeClassifier
 from sklearn.preprocessing import MultiLabelBinarizer
 from transformers import pipeline
 from transformers import AutoTokenizer, AutoModelForTokenClassification
+from common import *
 
 @st.cache_data
 def load_ner(option):
@@ -131,14 +132,18 @@ def render():
     ml_model,xlb,ylb = train_model(option)
     data_load_state.text(f'Loading data...done!')
 
-    # Input field for the user to enter text
-    text = st.text_area("Enter your complaint/problem here:", "")
+    # Input field for the user to enter textif 'text_value' not in st.session_state:
+    if 'text_value' not in st.session_state:
+        st.session_state.text_value = ""
+    c = st.container()
+    display_examples('text_value')
+    text = c.text_area("Enter your complaint/problem here:", st.session_state['text_value'],height=400)
 
     # Logic to process the input and generate output
     if text:
         problem = parse_problem(text,model,tokenizer)
         st.markdown("#### Extracted problems")
-        st.caption('Problems are extracted using albert-medical-ner-proj NER (may not work well with other rule sets)')
+        st.caption('Not yet implemented for SciBert (uses albert-medical-ner-proj instead)')
         st.markdown(f"{' | '.join(problem)}")
 
         st.markdown("#### Recommended Treatment")

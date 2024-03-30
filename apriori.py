@@ -6,6 +6,7 @@ from mlxtend.preprocessing import TransactionEncoder
 from sklearn.preprocessing import MultiLabelBinarizer
 from transformers import pipeline
 from transformers import AutoTokenizer, AutoModelForTokenClassification
+from common import *
 
 @st.cache_data
 def load_ner(option):
@@ -141,8 +142,11 @@ def render():
     rules = load_rules(option)
     data_load_state.text(f'Loading data...done! Working with {rules.shape[0]} rules.')
 
-    # Input field for the user to enter text
-    text = st.text_area("Enter your complaint/problem here:", "")
+    if 'text_value' not in st.session_state:
+        st.session_state.text_value = ""
+    c = st.container()
+    display_examples('text_value')
+    text = c.text_area("Enter your complaint/problem here:", st.session_state['text_value'],height=400)
 
     # Logic to process the input and generate output
     if text:
